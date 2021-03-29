@@ -16,6 +16,8 @@ Auto-image-renamer automates the task of renaming images with meaningful names. 
 ### 1) Get a Microsoft API Key for Free
 [https://www.microsoft.com/cognitive-services/en-us/sign-up](https://www.microsoft.com/cognitive-services/en-us/sign-up "API Key").
 
+This is a weird process, it's all AZURE based now, but you create an account. Then you need to create a cognitive service app, that will allow you to create KEYS and PATHENDS. Once you've created that, you'll get two API keys. Put one in the renamer.py and you'll be golden
+
 Replace this key with `MICROSOFT_VISION_API_KEY` in renamer.py
 
 ### 2) Usage
