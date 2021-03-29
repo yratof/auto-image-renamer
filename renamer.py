@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
+from random import randrange
 
 import sys
 import os
@@ -26,7 +27,7 @@ if is_py3:
     import http.client as httplib
 
 
-MICROSOFT_VISION_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+MICROSOFT_VISION_API_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 ALLOWED_IMAGE_EXTENSIONS = ['.jpeg', '.jpg', '.png']
 
 
@@ -49,12 +50,11 @@ def get_extension(file):
     file, ext = os.path.splitext(file)
     return ext
 
-
 def rename_img(old, new, base_dir):
     if is_exists(old):
         ext = get_extension(old).lower()
-        os.rename(old, join(base_dir,new + ext))
-        print("Renaming ", old, "to ",  new + ext)
+        os.rename(old, join(base_dir, new + "-" + str(randrange(10000)) + ext ))
+        print("Renaming ", old, "to ", new + "-" + str(randrange(10000)) + ext )
 
 
 def get_caption(image_file):
@@ -67,8 +67,8 @@ def get_caption(image_file):
     })
     data = open(image_file, 'rb')
     try:
-        conn = httplib.HTTPSConnection('api.projectoxford.ai')
-        conn.request("POST", "/vision/v1.0/describe?%s" % params, data, headers)
+        conn = httplib.HTTPSConnection('westeurope.api.cognitive.microsoft.com')
+        conn.request("POST", "/vision/v1.0/analyze?visualFeatures=Description&%s" % params, data, headers)
         response = conn.getresponse()
         response_data = response.read().decode('utf-8')
         json_data = json.loads(response_data)
@@ -76,7 +76,7 @@ def get_caption(image_file):
         conn.close()
         return caption_text
     except Exception as e:
-        print("Exception while communicating with vision api- ", str(e))
+        print("Exception while communicating with vision api: ", str(e))
 
 
 def full_path(base, file):
